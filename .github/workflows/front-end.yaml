@@ -3,12 +3,12 @@ name: Lint front-end
 on:
   push:
     branches: ["main", "dev"]
-    paths:
-      - "front-end/**"
+    # paths:
+    #   - "front-end/**"
     
   pull_request:
-    paths:
-      - "front-end/**"
+    # paths:
+    #   - "front-end/**"
 
 
 jobs:
@@ -29,6 +29,9 @@ jobs:
           node-version: 20
           cache: 'npm'
           cache-dependency-path: front-end/package-lock.json
+
+      - name: Install dependencies
+        run: npm install
 
       - name: Run linter
         run: npm run lint

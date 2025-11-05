@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react"
-import { createOneTask, deleteTask, getManyTasks, type Task } from "../fetch/Tasks"
-import { Box, Button, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
+import { deleteTask, getManyTasks, type Task } from "../fetch/Tasks"
+import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { NavLink, useNavigate } from "react-router"
 import "./ListAll.css"
 
@@ -24,10 +24,6 @@ export default function ListAllTasks() {
     await loadTasks()
   }
 
-  async function handleCreate(input: Omit<Task, "id">) {
-    await createOneTask(input)
-    await loadTasks()
-  }
 
   return (
     <>

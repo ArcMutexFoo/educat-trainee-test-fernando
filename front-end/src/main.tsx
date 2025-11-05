@@ -12,5 +12,6 @@ createRoot(document.getElementById('root')!).render(
       <Route path='/update/:id' element={<UpdateOne />} />
       <Route path='/create' element={<CreateOneTask />} />
     </Routes>
+
   </BrowserRouter>,
 )

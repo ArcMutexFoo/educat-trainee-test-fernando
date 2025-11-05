@@ -1,10 +1,9 @@
 import { useForm } from "react-hook-form";
-import { updateTask, type Task } from "../fetch/Tasks";
+import { updateTask} from "../fetch/Tasks";
 import { useNavigate, useParams, useSearchParams } from "react-router";
 import {z} from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, FormControl, InputLabel, NativeSelect, TextField } from "@mui/material";
-import { useState } from "react";
 
 const updateProductFormSchema = z.object({
     name: z.string(),
