@@ -26,6 +26,8 @@ Use o comando para usar o docker compose
 docker compose up -d
 ```
 
+O front-end roda na porta 5173 e o back-end na porta 8000
+
 ### Decisoes tomadas
 
 #### Back-end
