@@ -1,7 +1,7 @@
 from django.http import JsonResponse, HttpRequest
-from django.core.paginator import Paginator
 from .models import Task
 from .serializers import TaskSerializer
+from .repository import get_many_tasks
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -20,25 +20,7 @@ def handleTasks(request):
         if direction.lower() == 'desc':
             order_by = f'-{order_by}'
 
-        queryset = Task \
-            .objects \
-            .filter(name__icontains=search) \
-            .order_by(order_by) \
-            .all()
-
-
-        paginator = Paginator(queryset, limit)
-        page = paginator.get_page(page)
-        serializer = TaskSerializer(page.object_list, many=True)
-
-        data: dict[str, any] = {
-            "page": page.number,
-            "limit": limit,
-            "total_pages": paginator.num_pages,
-            "total_items": paginator.count,
-            # "result": list(page.object_list.values())
-            "result": serializer.data
-        }
+        data = get_many_tasks(page, limit, search, order_by, direction)
 
         # serializer = TaskSerializer(task)
         return Response(data)
