@@ -1,18 +1,28 @@
 import { useCallback, useEffect, useState } from "react"
-import { deleteTask, getManyTasks, type Task } from "../fetch/Tasks"
+import { deleteTask, getManyTasks, type TaskRequest } from "../../fetch/Tasks"
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
-import { NavLink, useNavigate } from "react-router"
+import { NavLink, useNavigate, useSearchParams } from "react-router"
 import "./ListAll.css"
+import TaskPagination from "../../components/Pagination/Pagination"
+import FilteringInput from "../../components/FilteringInput/FilteringInput"
 
 export default function ListAllTasks() {
-  const [tasks, setTasks] = useState<Task[]>()
+  const [tasks, setTasks] = useState<TaskRequest | null>()
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
 
 
   const loadTasks = useCallback(async () => {
-    const data = await getManyTasks()
+    const search = searchParams.get("search") ?? ""
+    const page = searchParams.get("page") ?? "1"
+    const orderBy = searchParams.get("orderBy") ?? ""
+    const direction = searchParams.get("direction") ?? ""
+    const limit = searchParams.get("limit") ?? ""
+
+
+    const data = await getManyTasks(search, page, direction, orderBy, parseInt(limit))
     setTasks(data)
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     loadTasks()
@@ -41,6 +51,7 @@ export default function ListAllTasks() {
         <NavLink to={"/create"}
         className={"whiteText"}>Criar nova task</NavLink>
       </Button>
+      <FilteringInput />
       <TableContainer>
         <Table>
           <TableHead>
@@ -54,7 +65,7 @@ export default function ListAllTasks() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks?.map((t, idx) => (
+            {tasks?.result.map((t, idx) => (
               <TableRow>
                 <TableCell key={idx}>{t.name}</TableCell>
                 <TableCell key={idx}>{t.description}</TableCell>
@@ -78,7 +89,8 @@ export default function ListAllTasks() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      <TaskPagination totalPages={tasks?.total_pages}/>
     </>
   )
 }
-

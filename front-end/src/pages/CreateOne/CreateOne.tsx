@@ -1,69 +1,44 @@
-import { useForm } from "react-hook-form";
-import { updateTask} from "../fetch/Tasks";
-import { useNavigate, useParams, useSearchParams } from "react-router";
-import {z} from 'zod'
+import { Box, Button, FormControl, InputLabel, NativeSelect, TextField } from "@mui/material"
+import { useForm } from "react-hook-form"
+import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Button, FormControl, InputLabel, NativeSelect, TextField } from "@mui/material";
+import { useNavigate } from "react-router"
+import { createOneTask } from "../../fetch/Tasks"
 
-const updateProductFormSchema = z.object({
+
+const addProductFormSchema = z.object({
     name: z.string(),
     description: z.string(),
     status: z.string(),
     priority: z.string()
 })
 
-type UpdateProductFormSchema = z.infer<typeof updateProductFormSchema>
+type AddProductFormSchema = z.infer<typeof addProductFormSchema>
 
+export default function CreateOneTask(){
 
-
-export default function UpdateOne() {
-
-    
-    const navigate = useNavigate()
-    const {id} = useParams()
-    const [searchParams] = useSearchParams()
-
-
-    const name = searchParams.get("name") ?? ""
-    const description = searchParams.get("description") ?? ""
-    const priority = searchParams.get("priority") ?? ""
-    const status = searchParams.get("status") ?? ""
-    
-    const { register, handleSubmit } = useForm({
-        resolver: zodResolver(updateProductFormSchema),
-        defaultValues: {
-            name: name,
-            description: description,
-            status: status,
-            priority: priority,
-        }
+    const { register, handleSubmit } = useForm<AddProductFormSchema>({
+        resolver: zodResolver(addProductFormSchema)
     })
+    const navigate = useNavigate()
 
-
-    async function handleUpdateTask(data: UpdateProductFormSchema) {
-
-        try {
-            const parsedId = parseInt(id!)
-
-            await updateTask(parsedId, {
-                name: data.name,
-                description: data.description,
-                priority: data.priority,
-                status: data.status,
-            })
-
-            navigate("/")
-        } catch (error) {
-            console.log("error updating task:", error)
-            navigate("/")
+    async function handleCreateTask(data: AddProductFormSchema) {
+        const task = {
+            name: data.name,
+            description: data.description,
+            status: data.status,
+            priority: data.priority
         }
+        await createOneTask(task)
 
-        
+        navigate("/")
+
     }
 
-
     return (<>
-        <form onSubmit={handleSubmit(handleUpdateTask)}>
+        <h1>Create a task</h1>
+
+        <form onSubmit={handleSubmit(handleCreateTask)}>
             <TextField
                 label="Nome da task"
                 placeholder="digite o nome da task..."
@@ -82,7 +57,6 @@ export default function UpdateOne() {
                     mx: 2,
                     my: 2
                 }}
-
             />
 
             <FormControl sx={{
@@ -134,11 +108,11 @@ export default function UpdateOne() {
             </FormControl>
 
             <Box>
-                <Button type="submit">Atualizar</Button>
+
+                <Button type="submit">Criar</Button>
             </Box>
             
 
         </form>
-    
     </>)
 }

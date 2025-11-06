@@ -1,9 +1,9 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { BrowserRouter, Route, Routes } from 'react-router'
-import ListAll from './components/ListAll.tsx'
-import CreateOneTask from './components/CreateOne.tsx'
-import UpdateOne from './components/UpdateOne.tsx'
+import ListAll from './pages/ListAll/ListAll.tsx'
+import CreateOneTask from './pages/CreateOne/CreateOne.tsx'
+import UpdateOne from './pages/UpdateOne/UpdateOne.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>

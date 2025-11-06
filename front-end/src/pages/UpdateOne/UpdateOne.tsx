@@ -1,44 +1,69 @@
-import { Box, Button, FormControl, InputLabel, NativeSelect, TextField } from "@mui/material"
-import { useForm } from "react-hook-form"
-import { z } from 'zod'
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams, useSearchParams } from "react-router";
+import {z} from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createOneTask } from "../fetch/Tasks"
-import { useNavigate } from "react-router"
+import { Box, Button, FormControl, InputLabel, NativeSelect, TextField } from "@mui/material";
+import { updateTask } from "../../fetch/Tasks";
 
-
-const addProductFormSchema = z.object({
+const updateProductFormSchema = z.object({
     name: z.string(),
     description: z.string(),
     status: z.string(),
     priority: z.string()
 })
 
-type AddProductFormSchema = z.infer<typeof addProductFormSchema>
+type UpdateProductFormSchema = z.infer<typeof updateProductFormSchema>
 
-export default function CreateOneTask(){
 
-    const { register, handleSubmit } = useForm<AddProductFormSchema>({
-        resolver: zodResolver(addProductFormSchema)
-    })
+
+export default function UpdateOne() {
+
+    
     const navigate = useNavigate()
+    const {id} = useParams()
+    const [searchParams] = useSearchParams()
 
-    async function handleCreateTask(data: AddProductFormSchema) {
-        const task = {
-            name: data.name,
-            description: data.description,
-            status: data.status,
-            priority: data.priority
+
+    const name = searchParams.get("name") ?? ""
+    const description = searchParams.get("description") ?? ""
+    const priority = searchParams.get("priority") ?? ""
+    const status = searchParams.get("status") ?? ""
+    
+    const { register, handleSubmit } = useForm({
+        resolver: zodResolver(updateProductFormSchema),
+        defaultValues: {
+            name: name,
+            description: description,
+            status: status,
+            priority: priority,
         }
-        await createOneTask(task)
+    })
 
-        navigate("/")
 
+    async function handleUpdateTask(data: UpdateProductFormSchema) {
+
+        try {
+            const parsedId = parseInt(id!)
+
+            await updateTask(parsedId, {
+                name: data.name,
+                description: data.description,
+                priority: data.priority,
+                status: data.status,
+            })
+
+            navigate("/")
+        } catch (error) {
+            console.log("error updating task:", error)
+            navigate("/")
+        }
+
+        
     }
 
-    return (<>
-        <h1>Create a task</h1>
 
-        <form onSubmit={handleSubmit(handleCreateTask)}>
+    return (<>
+        <form onSubmit={handleSubmit(handleUpdateTask)}>
             <TextField
                 label="Nome da task"
                 placeholder="digite o nome da task..."
@@ -57,6 +82,7 @@ export default function CreateOneTask(){
                     mx: 2,
                     my: 2
                 }}
+
             />
 
             <FormControl sx={{
@@ -108,11 +134,11 @@ export default function CreateOneTask(){
             </FormControl>
 
             <Box>
-
-                <Button type="submit">Criar</Button>
+                <Button type="submit">Atualizar</Button>
             </Box>
             
 
         </form>
+    
     </>)
 }
