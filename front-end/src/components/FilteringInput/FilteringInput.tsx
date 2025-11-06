@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Box, Button, FormControl, InputLabel, NativeSelect, TextField } from "@mui/material"
-import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { useSearchParams } from "react-router"
 import z from "zod"
@@ -12,12 +11,11 @@ const filterTaskSchema = z.object({
     limit: z.number(),
 })
 
-type FilterTaskSchema = z.infer<typeof filterTaskSchema>
 
 
 export default function FilteringInput() {
 
-    const [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams] = useSearchParams()
 
     // const [search, setSearch] = useState(searchParams.get("search") ?? "")
     // const [orderBy, setOrderBy] = useState(searchParams.get("orderBy") ?? "")
@@ -29,7 +27,7 @@ export default function FilteringInput() {
     const direction = searchParams.get("direction") ?? ""
     const limit = searchParams.get("limit") ?? ""
 
-    const { register, watch} = useForm({
+    const { register} = useForm({
         resolver: zodResolver(filterTaskSchema),
         defaultValues: {
             search: search,
@@ -39,8 +37,6 @@ export default function FilteringInput() {
         }
     })
 
-
-    let formValues = watch()
 
     // useEffect(() => {
     //     const params = new URLSearchParams()

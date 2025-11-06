@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react"
-import { deleteTask, getManyTasks, type Task, type TaskRequest } from "../../fetch/Tasks"
+import { deleteTask, getManyTasks, type TaskRequest } from "../../fetch/Tasks"
 import { Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material"
 import { NavLink, useNavigate, useSearchParams } from "react-router"
 import "./ListAll.css"
@@ -22,7 +22,7 @@ export default function ListAllTasks() {
 
     const data = await getManyTasks(search, page, direction, orderBy, parseInt(limit))
     setTasks(data)
-  }, [])
+  }, [searchParams])
 
   useEffect(() => {
     loadTasks()

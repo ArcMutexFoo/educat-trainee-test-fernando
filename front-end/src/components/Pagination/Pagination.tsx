@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router";
 
 export default function TaskPagination({totalPages}: {totalPages: number | undefined}) {
 
-    let [searchParams, setSearchParams] = useSearchParams()
+    const [searchParams, setSearchParams] = useSearchParams()
     const [page, setPage] = useState<string>(searchParams.get("") ?? "1")
 
 

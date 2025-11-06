@@ -30,8 +30,9 @@ export async function getManyTasks(search: string, page: string, direction: stri
             },
         }
 
-        const res = await fetch(`http://localhost:8000/tasks?search=${search}&page=${page}&direction=${direction}&orderBy=${orderBy}`
-            , options)
+        const url = `http://localhost:8000/tasks?search=${search}&page=${page}&direction=${direction}&orderBy=${orderBy}&limit=${limit}`
+
+        const res = await fetch(url, options)
         // return response.data
 
         console.log(res)
