@@ -113,7 +113,7 @@ export async function updateTask(id: number, updatedFields: Partial<Task>): Prom
 
 export async function deleteTask(id: number): Promise<void> {
     try {
-        const response = await fetch(`http://localhost:8000/tasks/${id}/`, {
+        const response = await fetch(`http://localhost:8000/tasks/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
