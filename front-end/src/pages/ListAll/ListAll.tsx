@@ -15,9 +15,9 @@ export default function ListAllTasks() {
   const loadTasks = useCallback(async () => {
     const search = searchParams.get("search") ?? ""
     const page = searchParams.get("page") ?? "1"
-    const orderBy = searchParams.get("orderBy") ?? ""
-    const direction = searchParams.get("direction") ?? ""
-    const limit = searchParams.get("limit") ?? ""
+    const orderBy = searchParams.get("orderBy") ?? "id"
+    const direction = searchParams.get("direction") ?? "asc"
+    const limit = searchParams.get("limit") ?? "10"
 
 
     const data = await getManyTasks(search, page, direction, orderBy, parseInt(limit))
