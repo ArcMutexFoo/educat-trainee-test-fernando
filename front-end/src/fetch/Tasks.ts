@@ -1,3 +1,10 @@
+export type TaskRequest = {
+    page: number,
+    limit: number,
+    total_pages: number,
+    total_items: number,
+    result: Task[]
+}
 
 export type Task = {
     id: number,
@@ -8,7 +15,7 @@ export type Task = {
 }
 
 
-export async function getManyTasks(): Promise<Task[]> {
+export async function getManyTasks(search: string, page: string, direction: string, orderBy: string, limit: number): Promise<TaskRequest | null> {
     try {
         // const response = await axios.get<Task[]>("http://localhost:8000/tasks", {
         //     headers: {
@@ -17,13 +24,14 @@ export async function getManyTasks(): Promise<Task[]> {
         // })
 
         const options = {
-            method: "GET",
+            // method: "GET",
             headers: {
                 "Content-Type": "application/json"
             },
         }
 
-        const res = await fetch("http://localhost:8000/tasks/", options)
+        const res = await fetch(`http://localhost:8000/tasks?search=${search}&page=${page}&direction=${direction}&orderBy=${orderBy}`
+            , options)
         // return response.data
 
         console.log(res)
@@ -32,12 +40,12 @@ export async function getManyTasks(): Promise<Task[]> {
             console.log("Error while fetching data res not ok:", res.statusText)
         }
 
-        const data = await res.json()
+        const data: TaskRequest = await res.json()
         console.log(data)
         return data
     } catch (error) {
         console.log("Unexpected error", error)
-        return []
+        return null
     }
 }
 
